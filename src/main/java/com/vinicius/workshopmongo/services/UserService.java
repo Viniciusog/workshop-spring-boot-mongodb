@@ -23,23 +23,37 @@ public class UserService {
 
 	public User findById(String id) {
 		User user = repo.findOne(id);
-		if(user == null) {
+		if (user == null) {
 			throw new ObjectNotFoundException("Objeto não encontrado");
 		}
 		return user;
-		
+
 	}
-	
+
 	public User insert(User obj) {
-			return repo.insert(obj);
+		return repo.insert(obj);
 	}
-	
+
 	public User fromDTO(UserDTO objDTO) {
 		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
 	}
-	
+
 	public void delete(String id) {
-		findById(id); //Fazer uma procura pelo id para ver se existe, se não tiver, vai retornar uma exceção
+		findById(id); // Fazer uma procura pelo id para ver se existe, se não tiver, vai retornar uma
+						// exceção
 		repo.delete(id);
+	}
+
+	public User update(User obj) {
+		User newObj = repo.findOne(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+
+	}
+
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
+
 	}
 }
