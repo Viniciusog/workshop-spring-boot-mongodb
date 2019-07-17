@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.vinicius.workshopmongo.domain.Post;
 import com.vinicius.workshopmongo.domain.User;
+import com.vinicius.workshopmongo.dto.AuthorDTO;
 import com.vinicius.workshopmongo.repository.PostRepository;
 import com.vinicius.workshopmongo.repository.UserRepository;
 
@@ -36,11 +37,13 @@ public class Instantiation implements CommandLineRunner {
 		User alex = new User(null, "Alex Green", "alex@gmail.com");
 		User bob = new User(null, "Bob Grey", "bob@gmail.com");
 		
-		
-		Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "vou viajar para São Paulo, abraço!", maria);
-		Post post2 = new Post(null, sdf.parse("23/03/2018"), "bom dia", "Acordei Feliz hoje", maria);
-		
+		//Vamos salvar os usuários primeiro para que eles tenham um id próprio criado pelo banco de dados
 		userRepository.save(Arrays.asList(maria, alex, bob));
+		
+		Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "vou viajar para São Paulo, abraço!", new AuthorDTO(maria));
+		Post post2 = new Post(null, sdf.parse("23/03/2018"), "bom dia", "Acordei Feliz hoje", new AuthorDTO(maria));
+		
+		
 		postRepository.save(Arrays.asList(post1, post2));
 		
 	}
