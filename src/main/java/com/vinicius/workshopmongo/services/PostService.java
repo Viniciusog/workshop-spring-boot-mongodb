@@ -1,5 +1,6 @@
 package com.vinicius.workshopmongo.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,13 @@ public class PostService {
 	
 	public List<Post> findByTitle(String text){
 		return repo.searchTitle(text); 
+	}
+	
+	public List<Post> fullSearch(String text, Date minDate, Date maxDate){
+		//Para pegar os comentários entre datas, precisamos conferir todo o ultimo dia, pois por padrão a hora até um dia é até o instante 
+		//apartir da meia noite deste dia
+		
+		maxDate = new Date(maxDate.getTime() + 24 * 60 * 60 * 1000);
+		return repo.fullSearch(text, minDate, maxDate);
 	}
 }
