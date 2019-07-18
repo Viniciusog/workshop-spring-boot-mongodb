@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.vinicius.workshopmongo.domain.Post;
 import com.vinicius.workshopmongo.domain.User;
 import com.vinicius.workshopmongo.dto.UserDTO;
 import com.vinicius.workshopmongo.services.UserService;
@@ -39,7 +40,7 @@ public class UserResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> findById(@RequestBody UserDTO objDto) {
+	public ResponseEntity<Void> insert(@RequestBody UserDTO objDto) {
 		User obj = service.fromDTO(objDto);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objDto.getId()).toUri();
@@ -59,4 +60,12 @@ public class UserResource {
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
+	
+	@RequestMapping(value = "/{id}/posts", method = RequestMethod.GET)
+	public ResponseEntity<List<Post>> findPost(@PathVariable String id) {
+		User obj = service.findById(id);
+		//Vai retornar a lista de post relacionada ao meu usuário
+		return ResponseEntity.ok().body(obj.getPosts());
+	}
+	
 }
